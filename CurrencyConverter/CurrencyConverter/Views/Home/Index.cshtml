@@ -1,0 +1,58 @@
+﻿@model CurrencyConverter.Models.HomeModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Currency Converter</h1>
+    <p class="lead">Convert GBP to USD, AUS or EUR.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Get going</h2>
+
+        @using (Html.BeginForm("SubmitForm", "Home", FormMethod.Post))
+        {
+            <p>Select Currency:</p>
+            @Html.DropDownListFor(m => m.ConveterForm.CurrencyRatio, new SelectList(Model.Currencies, "Value", "Key"))
+            <br /><br />
+            <p>GBP to convert:</p>
+            @Html.TextBoxFor(m => m.ConveterForm.GbrAmount)
+            @Html.ValidationMessageFor(m => m.ConveterForm.GbrAmount)
+            <br /><br />
+            <input type="submit" class="btn btn-primary btn-lg" value="Convert &raquo;" />
+        }
+        <br />
+        @if (!string.IsNullOrEmpty(Model.ConveterForm?.ConvertedAmount))
+        {
+            @Model.ConveterForm.ConvertedAmount
+        }
+    </div>
+    <div class="col-md-6">
+        <h2>Get old searches</h2>
+
+        @using (Html.BeginForm("GetOldSearch", "Home", FormMethod.Post))
+        {
+            <p>From Date:</p>
+            @Html.TextBoxFor(m => m.FromDate, new { type = "date" })
+            <br /><br />
+            <p>To Date:</p>
+            @Html.TextBoxFor(m => m.ToDate, new { type = "date" })
+            <br /><br />
+            <input type="submit" class="btn btn-primary btn-lg" value="Get Results &raquo;" />
+        }
+        <br />
+        @if (Model.SearchInfos?.Any() != null)
+        {
+            foreach (var info in Model.SearchInfos)
+            {
+                <p>Searched for:</p>
+                @info.Amount;
+                <br />
+                <p>The currency was:</p>
+                @info.Currency;
+            }
+        }
+    </div>
+</div>
